@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import model.Product;
+import model.User;
 import model.category;
 
 /**
@@ -22,7 +23,7 @@ public class ProductDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
     
-    public List<Product> findProductById(String id){
+    public List<Product> findProductByCatgeId(String id){
         ArrayList<Product> list = new ArrayList<>();
         String query = "select * from Production where categoryId ="+id;
         try {
@@ -42,12 +43,33 @@ public class ProductDAO {
         return list;
     }
     
+        public Product findProductById(String id){
+       try {
+            String query = "select * from Production where Production.id =? ";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Product a = new Product(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getFloat(3),
+                        rs.getString(4),
+                        rs.getInt(5)
+                );
+                return a;
+            }
+
+        } catch (Exception e) {
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         ProductDAO dao = new ProductDAO();
-        List<Product> a = dao.findProductById("1");
-        for (Product category1 : a) {
-            System.out.println(category1);
-        }
+        Product a = dao.findProductById("1");
+        System.out.println(a);
 
     }
 }

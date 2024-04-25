@@ -24,7 +24,7 @@
             <button class="button" id="loginBtn" onclick="window.location.href='\login'">Login</button>
             <button class="button" id="logoutBtn" onclick="window.location.href='\logout'">Logout</button>
             <button class="button" id="RegisterBtn" onclick="window.location.href='\signup'">Register</button>
-            <button class="button" id="showCartBtn">Show Cart</button>
+            <button class="button" id="showCartBtn" onclick="window.location.href='\cart'">Show Cart</button>
         </div>
     </div>
         
@@ -63,7 +63,7 @@
                     <td>${o.name}</td>
                     <td>${o.price}</td>
                     <td>${o.desc}</td>
-                    <td><a href="/EBL5/addToCart">Add to Cart</a></td>
+                    <td><a href="/EBL5/addToCart?productId=${o.id}">Add to Cart</a></td>
                  </tr>
             </c:forEach>
         </tbody>

@@ -4,6 +4,7 @@
  */
 package controller;
 
+import DAO.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import model.CartItem;
+import model.Product;
 import model.User;
 
 /**
@@ -30,11 +35,24 @@ public class addToCart extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         HttpSession session = request.getSession();
-        var user =session.getAttribute("user");
-        if(user == null){
+        ProductDAO productDao = new ProductDAO();
+        HttpSession session = request.getSession();
+        var user = session.getAttribute("user");
+        if (user == null) {
             response.sendRedirect("/EBL5/login");
-        }else{
+        } else {
+            List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+            if (cart == null) {
+                cart = new ArrayList<>();
+                session.setAttribute("cart", cart);
+                
+
+            }
+            String productId = request.getParameter("productId");
+            int quantity =1;
+            Product product = productDao.findProductById(productId);
+            CartItem item = new CartItem(product, quantity);
+            cart.add(item);
             response.sendRedirect("/EBL5/index");
         }
     }
@@ -65,7 +83,7 @@ public class addToCart extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
+
     }
 
     /**

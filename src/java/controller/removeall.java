@@ -4,23 +4,23 @@
  */
 package controller;
 
-import DAO.CategoryDAO;
-import DAO.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.Product;
-import model.category;
+import model.CartItem;
 
 /**
  *
  * @author ADMIN
  */
-public class index extends HttpServlet {
+@WebServlet(name = "removeall", urlPatterns = {"/removeall"})
+public class removeall extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,8 +33,14 @@ public class index extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        cart.clear();
+        session.setAttribute("cart", cart);
 
+        request.setAttribute("cart", cart);
+
+        request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -49,21 +55,7 @@ public class index extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String cateId = request.getParameter("category");
-        
-        if(cateId == null){
-            cateId = "1";
-        }
-        CategoryDAO cateDao = new CategoryDAO();
-        ProductDAO productDao = new ProductDAO();
-        
-        List<Product> listProduct = productDao.findProductByCatgeId(cateId);
-        List<category> listCategory = cateDao.listCategory();
-        
-        request.setAttribute("listCategory", listCategory);
-        request.setAttribute("listProduct", listProduct);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
