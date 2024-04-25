@@ -1,6 +1,7 @@
 package controller;
 
 import entity.Products;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -9,133 +10,137 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Vector;
 import model.DAOProducts;
+import java.sql.ResultSet;
 
-/**
- *
- * @author admin
- */
 public class ProductController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       DAOProducts dao = new DAOProducts();
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductController</title>");
-            out.println("</head>");
-            out.println("<body>");
+        PrintWriter out = response.getWriter();
+        DAOProducts dao = new DAOProducts();
+        String service = request.getParameter("service");
+        if (service == null) { // run direct controller
+            //default
+            service = "listAllProducts";
+        }
+        if (service.equals("deleteProduct")) {
+            int pid = Integer.parseInt(request.getParameter("pid"));
+            int n = dao.removeProduct(pid);
+            System.out.println(n);
+            response.sendRedirect("ProductController");
 
-            String service = request.getParameter("service");
-            
-            if (service == null) { //controller chay dau tien => co the service null
-                //default
-                service = "listAllProduct";
-            }
-            
-            if(service.equals("deleteProduct")){
-                int pid = Integer.parseInt(request.getParameter("pid"));
-                int n = dao.removeProduct(pid);
-                System.out.println(n);
-                response.sendRedirect("productcontroller");
-                
-            }
-            
-            if (service.equals("insertProduct")) {
-                //getdata
-                String productName = request.getParameter("productName");
-                String supplierID = request.getParameter("supplierID");
-                String categoryID = request.getParameter("categoryID");
-                String quantityPerUnit = request.getParameter("quantityPerUnit");
-                String unitPrice = request.getParameter("unitPrice");
-                String unitsInStock = request.getParameter("unitsInStock");
-                String unitsOnOrder = request.getParameter("unitsOnOrder");
-                String reorderLevel = request.getParameter("reorderLevel");
-                String discontinued = request.getParameter("discontinued");
-
-                //check data: empty, duplicate,isnumber...
-                //convert:
-                int supID = Integer.parseInt(supplierID);
-                int cateID = Integer.parseInt(categoryID);
-                double price = Double.parseDouble(unitPrice);
-                int unitStock = Integer.parseInt(unitsInStock);
-                int unitOrder = Integer.parseInt(unitsOnOrder);
-                int reorder = Integer.parseInt(reorderLevel);
-                int discon = Integer.parseInt(discontinued);
-                System.out.println("OK");
-
-                Products pro = new Products(0, productName, supID,
-                        cateID, quantityPerUnit, price, unitStock,
-                        unitOrder, reorder, discon == 1 ? true : false);
-                int n=dao.addProduct(pro);
-                //out.print(n);
-                System.out.println("n="+n);
-                response.sendRedirect("productcontroller");
-
-            }
-            
-            if (service.equals("listAllProduct")) {
-            out.print("<a href=\"insertProduct.html\"> Insert Product</a>");
-            
-            out.println("<form action=\"productcontroller\" method=\"get\">");
-            out.println("    <p> <input type=\"text\" name=\"pname\"></p>");
-            out.println("    <p> <input type=\"submit\" name=\"submit\" value=\"searchName\">");
-            out.println("        <input type=\"reset\" value=\"Clear\">");
-            out.println("    </p>");
-            out.println("</form>");
-
-            //in ra tieu de
-            out.println("<table border = 1>\n"
-                    + "      <caption>Product List</caption>\n"
-                    + "      <tr>\n"
-                    + "        <th>ProductID</th>\n"
-                    + "        <th>ProductName</th>\n"
-                    + "        <th>SupplierID</th>\n"
-                    + "        <th>CategoryID</th>\n"
-                    + "        <th>QuantityPerUnit</th>\n"
-                    + "        <th>UnitPrice</th>\n"
-                    + "        <th>UnitsInStock</th>\n"
-                    + "        <th>UnitsOnOrder</th>\n"
-                    + "        <th>ReorderLevel</th>\n"
-                    + "        <th>Discontinued</th>\n"
-                    + "        <th>update</th>\n"
-                    + "        <th>delete</th>\n"
-                    + "      </tr>");
-
+        }
+        if (service.equals("insertProduct")) {
             String submit = request.getParameter("submit");
-            Vector<Products> vecto = null; //dam bao ko bi loi khi dinh du lieu truy van cu
-            if (submit == null) { //chua submit => show all
-                vecto = dao.getProducts("SELECT * FROM Products");
-            } else {  //search
-                String pname = request.getParameter("pname");
-                vecto = dao.getProducts("SELECT * FROM Products WHERE ProductName like '%" + pname + "%'");
-            }
+            if (submit == null) {//show form insert
+                //getdata
+                ResultSet rsCate = dao.getData("Select * from Categories");
+                ResultSet rsSup = dao.getData("Select * from Suppliers");
+                // 
+                request.setAttribute("rsCate", rsCate);
+                request.setAttribute("rsSup", rsSup);
 
-            //in ra so phan tu trong bang
-            // Vector<Products> vecto = dao.getProducts("select * from products");
-            for (Products pro : vecto) {
-                out.println("<tr>\n"
-                        + "        <td>" + pro.getProductID() + "</td>\n"
-                        + "        <td>" + pro.getProductName() + "</td>\n"
-                        + "        <td>" + pro.getSupplierID() + "</td>\n"
-                        + "        <td>" + pro.getCategoryID() + "</td>\n"
-                        + "        <td>" + pro.getQuantityPerUnit() + "</td>\n"
-                        + "        <td>" + pro.getUnitPrice() + "</td>\n"
-                        + "        <td>" + pro.getUnitsInStock() + "</td>\n"
-                        + "        <td>" + pro.getUnitsOnOrder() + "</td>\n"
-                        + "        <td>" + pro.getReoderLevel() + "</td>\n"
-                        + "        <td>" + pro.isDiscontinued() + "</td>\n"
-                        + "        <td><a href=\"productcontroller?service=updateProduct&pid= "+pro.getProductID()+"\">Update </a></td>\n"
-                        + "        <td><a href=\"productcontroller?service=deleteProduct&pid="+pro.getProductID()+"\" "+"onclick=\"return confirm('are you sure?')\">Delete </a></td>\n"
-                        + "      </tr>");
+                request.getRequestDispatcher("/JSP/insertProduct.jsp")
+                        .forward(request, response);
+
+            } else { //insert
+                String ProductName = request.getParameter("ProductName");
+                String SupplierID = request.getParameter("SupplierID"),
+                        CategoryID = request.getParameter("CategoryID");
+                String QuantityPerUnit = request.getParameter("QuantityPerUnit");
+                String UnitPrice = request.getParameter("UnitPrice");
+                String UnitsInStock = request.getParameter("UnitsInStock"),
+                        UnitsOnOrder = request.getParameter("UnitsOnOrder"),
+                        ReorderLevel = request.getParameter("ReorderLevel");
+                String Discontinued = request.getParameter("Discontinued");
+                //check data: emply, duplicate, isnumber...
+                // convert
+                int supId = Integer.parseInt(SupplierID);
+                int cateId = Integer.parseInt(CategoryID);
+                double price = Double.parseDouble(UnitPrice);
+                int unitStock = Integer.parseInt(UnitsInStock);
+                int unitOder = Integer.parseInt(UnitsOnOrder);
+                int reOder = Integer.parseInt(ReorderLevel);
+                int disCon = Integer.parseInt(Discontinued);
+                //create Product
+                Products pro = new Products(0, ProductName,
+                        supId, cateId, QuantityPerUnit,
+                        price, unitStock, unitOder,
+                        reOder, (disCon == 1 ? true : false));
+                dao.addProduct(pro);
+                response.sendRedirect("ProductController");
             }
-            out.println("</table>");
+        }
+        if(service.equals("updateProduct")){
+            String submit = request.getParameter("submit");
+            if (submit == null) {//show form update
+                //getdata
+                ResultSet rsCate = dao.getData("Select * from Categories");
+                ResultSet rsSup = dao.getData("Select * from Suppliers");
+                // 
+                request.setAttribute("rsCate", rsCate);
+                request.setAttribute("rsSup", rsSup);
+                Vector<Products> vector=
+                        dao.getProducts("select * from Products where ProductID="+
+                                Integer.parseInt(request.getParameter("pid")));
+                request.setAttribute("vector", vector);
+
+                request.getRequestDispatcher("/JSP/updateProduct.jsp")
+                        .forward(request, response);
+
+            }else{
+                String id = request.getParameter("ProductID");
+                int pid=Integer.parseInt(id);
+                String ProductName = request.getParameter("ProductName");
+                String SupplierID = request.getParameter("SupplierID"),
+                        CategoryID = request.getParameter("CategoryID");
+                String QuantityPerUnit = request.getParameter("QuantityPerUnit");
+                String UnitPrice = request.getParameter("UnitPrice");
+                String UnitsInStock = request.getParameter("UnitsInStock"),
+                        UnitsOnOrder = request.getParameter("UnitsOnOrder"),
+                        ReorderLevel = request.getParameter("ReorderLevel");
+                String Discontinued = request.getParameter("Discontinued");
+                //check data: emply, duplicate, isnumber...
+                // convert
+                int supId = Integer.parseInt(SupplierID);
+                int cateId = Integer.parseInt(CategoryID);
+                double price = Double.parseDouble(UnitPrice);
+                int unitStock = Integer.parseInt(UnitsInStock);
+                int unitOrder = Integer.parseInt(UnitsOnOrder);
+                int reOrder = Integer.parseInt(ReorderLevel);
+                int disCon = Integer.parseInt(Discontinued);
+                //create Product
+                Products pro = new Products(pid, ProductName,
+                        supId, cateId, QuantityPerUnit,
+                        price, unitStock, unitOrder,
+                        reOrder, (disCon == 1 ? true : false));
+                dao.updateProduct(pro);
+                response.sendRedirect("ProductController");
             }
-            out.println("</body>");
-            out.println("</html>");
+        }
+        if (service.equals("listAllProducts")) {
+            // get data from DAO
+            String submit = request.getParameter("submit");
+            Vector<Products> vector = null;
+            if (submit == null) {//chua submit --> show all
+                vector = dao.getProducts("select * from products");
+            } else { // search
+                String pname = request.getParameter("pname");
+                vector = dao.getProducts("select * from products "
+                        + " where ProductName like '%" + pname + "%'");
+            }
+            String titlePage = "ProductManage";
+            String titleTable = "List of Products";
+            //select view (JSP)
+            RequestDispatcher dispath
+                    = request.getRequestDispatcher("/JSP/listProduct.jsp");
+            //set data for view
+            request.setAttribute("data", vector);
+            request.setAttribute("titlePage", titlePage);
+            request.setAttribute("titleTable", titleTable);
+            //run
+            dispath.forward(request, response);
         }
     }
 
@@ -151,11 +156,6 @@ public class ProductController extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

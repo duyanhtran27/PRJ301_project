@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.Vector;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class DAOProducts extends DBConnect {
 
@@ -32,6 +33,42 @@ public class DAOProducts extends DBConnect {
             ex.printStackTrace();
         }
         return n;
+    }
+    public int updateProduct(Products pro) {
+        int n = 0;
+        String sql = "UPDATE [dbo].[Products]\n"
+                + "   SET [ProductName] = ?\n"
+                + "      ,[SupplierID] = ?\n"
+                + "      ,[CategoryID] = ?\n"
+                + "      ,[QuantityPerUnit] = ?\n"
+                + "      ,[UnitPrice] = ?\n"
+                + "      ,[UnitsInStock] = ?\n"
+                + "      ,[UnitsOnOrder] = ?\n"
+                + "      ,[ReorderLevel] = ?\n"
+                + "      ,[Discontinued] = ?\n"
+                + " WHERE ProductID = ?";
+
+        try {
+            PreparedStatement prestate = conn.prepareStatement(sql);
+            
+            prestate.setString(1, pro.getProductName());
+            prestate.setInt(2, pro.getSupplierID());
+            prestate.setInt(3, pro.getCategoryID());
+            prestate.setString(4, pro.getQuantityPerUnit());
+            prestate.setDouble(5, pro.getUnitPrice());
+            prestate.setInt(6, pro.getUnitsInStock());
+            prestate.setInt(7, pro.getUnitsOnOrder());
+            prestate.setInt(8, pro.getReoderLevel());
+            prestate.setInt(9, pro.isDiscontinued()==true ? 1: 0);
+            prestate.setInt(10, pro.getProductID());
+            
+            n = prestate.executeUpdate();
+        } catch (SQLException ex) {
+           ex.printStackTrace();
+        }
+        
+        return n;
+
     }
     public int updateDiscontinue(int pid, int discontinue){
         int n=0;
