@@ -16,7 +16,7 @@
     </head>
     <body>
         <p align="right"><a href="Cart?service=showCart">showCart</a> </p>
-        <p align="right"><a href="EmployeeController?service=login">Login</a> <br>
+        <p align="right"><a href="signin?service=login">Login</a> <br>
         <%
             String userName=(String)session.getAttribute("user");
             if(userName!=null){
