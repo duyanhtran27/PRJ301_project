@@ -15,6 +15,14 @@
     </script>
     </head>
     <body>
+        <p align="right"><a href="Cart?service=showCart">showCart</a> </p>
+        <p align="right"><a href="EmployeeController?service=login">Login</a> <br>
+        <%
+            String userName=(String)session.getAttribute("user");
+            if(userName!=null){
+        %>
+        <span style="color:red; text-align: right">Welcome <%=userName%></span>
+        <%}%></p>
         <p><a href="ProductController?service=insertProduct">insert Products</a></p>
         <form action="ProductController">
             <p><input type="text" name="pname" id="" /></p>
@@ -55,8 +63,8 @@
         <td><%=pro.getReoderLevel()%></td>
         <td><%=pro.isDiscontinued()%></td>
         <td><a href="ProductController?service=updateProduct&pid=<%=pro.getProductID()%>">Update</td>
-<!--        <td><a href="ProductController?service=deleteProduct&pid=<%=pro.getProductID()%>">Delete</td>-->
         <td><a href="ProductController?service=deleteProduct&pid=<%=pro.getProductID()%>" onclick="return confirmDelete()">Delete</a></td>
+        <td><a href="Cart?service=add2cart&pid=<%=pro.getProductID()%>">add2cart</a></td>
     </tr>
     <%}%>
 </table>
