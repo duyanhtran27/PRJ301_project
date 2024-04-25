@@ -277,10 +277,10 @@ public class DAOCustomers extends DBConnect{
 
     }
 
-    public int removeCustomer(int customerID) {
+    public int removeCustomer(int cid) {
         int n = 0;
         String sql = "DELETE FROM [dbo].[Customers]\n"
-                + "      WHERE CustomerID =" + customerID;
+                + "      WHERE CustomerID =" + cid;
 
         try {
             Statement st = conn.createStatement(); 
