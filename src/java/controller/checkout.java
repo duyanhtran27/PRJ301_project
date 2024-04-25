@@ -46,6 +46,10 @@ public class checkout extends HttpServlet {
         }
         
         dao.checkout(String.valueOf(user.getId()) ,String.valueOf(total),"1");
+        cart.clear();
+        session.setAttribute("cart", cart);
+        
+        response.sendRedirect("index");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

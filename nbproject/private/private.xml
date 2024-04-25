@@ -3,10 +3,30 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/HOCKY5/EBL5/web/JSP/listCategories.jsp</file>
-            <file>file:/D:/HOCKY5/EBL5/src/java/controller/CategoriesController.java</file>
-            <file>file:/D:/HOCKY5/EBL5/src/java/model/DAOCategories.java</file>
-            <file>file:/D:/HOCKY5/EBL5/web/JSP/updateCategory.jsp</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/model/User.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/DAO/AccountDAO.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/web/register.jsp</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/cart.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/checkout.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/web/index.html</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/model/CartItem.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/web/login.jsp</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/model/category.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/login.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/web/index.jsp</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/context/DBContext.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/web/cart.jsp</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/DAO/CategoryDAO.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/signup.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/index.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/DAO/ProductDAO.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/DAO/BillDao.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/logout.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/model/Bill.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/removeall.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/model/Product.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/addToCart.java</file>
+            <file>file:/D:/GithubRespository/PRJ301_project/src/java/controller/removeToCart.java</file>
         </group>
     </open-files>
 </project-private>
