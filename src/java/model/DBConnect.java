@@ -39,7 +39,7 @@ public class DBConnect {
         return rs;
     }
     public DBConnect(){
-        this("jdbc:sqlserver://localhost:1433;databaseName=EBL5","sa", "23052003");
+        this("jdbc:sqlserver://localhost:1433;databaseName=EBL5","sa", "123456");
     }
     public static void main(String[] args) {
         new DBConnect();
