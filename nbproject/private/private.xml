@@ -6,6 +6,8 @@
             <file>file:/D:/HOCKY5/EBL5/src/java/entity/Customers.java</file>
             <file>file:/D:/HOCKY5/EBL5/src/java/model/DAOEmployees.java</file>
             <file>file:/D:/HOCKY5/EBL5/web/JSP/listCustomers.jsp</file>
+            <file>file:/D:/HOCKY5/EBL5/web/JSP/signIn.jsp</file>
+            <file>file:/D:/HOCKY5/EBL5/src/java/controller/SignInServlet.java</file>
             <file>file:/D:/HOCKY5/EBL5/src/java/controller/CustomerController.java</file>
         </group>
     </open-files>

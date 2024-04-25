@@ -16,6 +16,10 @@
         <servlet-name>CustomerController</servlet-name>
         <servlet-class>controller.CustomerController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SignInServlet</servlet-name>
+        <servlet-class>controller.SignInServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MyServletAlias</servlet-name>
         <url-pattern>/MyServletURL</url-pattern>
@@ -31,5 +35,9 @@
     <servlet-mapping>
         <servlet-name>CustomerController</servlet-name>
         <url-pattern>/CustomerController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignInServlet</servlet-name>
+        <url-pattern>/signin</url-pattern>
     </servlet-mapping>
 </web-app>
