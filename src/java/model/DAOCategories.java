@@ -1,4 +1,3 @@
-
 package model;
 
 /**
@@ -12,17 +11,17 @@ import java.sql.PreparedStatement;
 import entity.Categories;
 import java.sql.SQLException;
 
-public class DAOCategories extends DBConnect{
-    
-    public Vector<Categories> getCategories(String sql){
+public class DAOCategories extends DBConnect {
+
+    public Vector<Categories> getCategories(String sql) {
         Vector<Categories> vector = new Vector<Categories>();
-        try{
+        try {
             Statement st = conn.createStatement(
                     ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = st.executeQuery(sql);
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 int categoryID = rs.getInt("CategoryID");
                 String categoryName = rs.getString("CategoryName");
                 String description = rs.getString("Description");
@@ -30,29 +29,27 @@ public class DAOCategories extends DBConnect{
                 Categories categories = new Categories(categoryID, categoryName, description);
 
                 vector.add(categories);
-                
+
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return vector;
     }
-    
+
     public int insertCategories(Categories cate) {
         int n = 0;
-        String sql = "INSERT INTO [dbo].[Categories]\n"
-                + "           ([CategoryName]\n"
-                + "           ,[Description]\n"
-                + "     VALUES(?,?)";
+        String sql = "INSERT INTO [dbo].[Categories] ([CategoryName],[Description],[Picture])\n"
+                + "     VALUES(?,?,?)";
 
         try {
             PreparedStatement prestate = conn.prepareStatement(sql);
             prestate.setString(1, cate.getCategoryName());
             prestate.setString(2, cate.getDescription());
-
+            prestate.setString(3, cate.getPicture());
+            
             n = prestate.executeUpdate();
-
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -70,7 +67,7 @@ public class DAOCategories extends DBConnect{
             prestate.setString(1, cateName);
             prestate.setInt(2, cateid);
             n = prestate.executeUpdate();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -92,7 +89,7 @@ public class DAOCategories extends DBConnect{
             prestate.setString(2, cate.getDescription());
             n = prestate.executeUpdate();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return n;
@@ -119,7 +116,7 @@ public class DAOCategories extends DBConnect{
             st = conn.createStatement();
             n = st.executeUpdate(sqlDelete);
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return n;
@@ -127,10 +124,10 @@ public class DAOCategories extends DBConnect{
 
     public static void main(String[] args) {
         DAOCategories cate = new DAOCategories();
-       // Categories categori = new Categories(1, "Laptop", "Break");
-      // int n = cate.insertCategories(categori);
-      
-      int n = cate.removeCategory(2);
+        // Categories categori = new Categories(1, "Laptop", "Break");
+        // int n = cate.insertCategories(categori);
+
+        int n = cate.removeCategory(2);
         Vector<Categories> vector = cate.getCategories("SELECT * FROM Categories");
         for (Categories categories : vector) {
             System.out.println(categories);
