@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.CartItem;
+import model.Status;
 import model.User;
 
 /**
@@ -38,18 +39,25 @@ public class checkout extends HttpServlet {
         HttpSession session = request.getSession();
         
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        List<CartItem> cartPrint =  cart;
         User user = (User) session.getAttribute("user");
         
         float total = 0;
         for(CartItem cartt : cart){
             total += cartt.getQuantity() * cartt.getProduct().getPrice();
         }
-        
+        Status status = dao.findStatus("1");
         dao.checkout(String.valueOf(user.getId()) ,String.valueOf(total),"1");
         cart.clear();
         session.setAttribute("cart", cart);
         
-        response.sendRedirect("index");
+        
+        request.setAttribute("status", status.getStatus());
+        request.setAttribute("customerName", user.getName());
+        request.setAttribute("total", total);
+        
+        request.getRequestDispatcher("bill.jsp").forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

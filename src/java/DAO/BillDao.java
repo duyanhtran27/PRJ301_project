@@ -8,17 +8,20 @@ import context.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import model.Product;
+import model.Status;
 
 /**
  *
  * @author ADMIN
  */
 public class BillDao {
-        Connection conn = null;
+
+    Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
-        public void checkout(String customerId, String total, String statusId) {
+
+    public void checkout(String customerId, String total, String statusId) {
         String query = "INSERT INTO dbo.Bill VALUES(?,?,?)";
         try {
             conn = new DBContext().getConnection();
@@ -30,5 +33,25 @@ public class BillDao {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public Status findStatus(String id) {
+        try {
+            String query = "select * from Status where id = ? ";
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Status a = new Status(rs.getInt(1),
+                        rs.getString(2)
+                );
+                return a;
+            }
+
+        } catch (Exception e) {
+        }
+        return null;
     }
 }
